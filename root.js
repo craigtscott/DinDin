@@ -43,6 +43,17 @@ class Root extends Component {
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
   );}
 
+  changePrice(direction){
+    let newPrice = this.state.price;
+    // debugger;
+    if (direction === "add" && this.state.price <= 4){
+      newPrice = this.state.price + 1;
+    } else if(this.state.price > 1){
+      newPrice = this.state.price - 1;
+    }
+    this.setState({price: newPrice});
+  }
+
 
   navigate(routeName) {
     this.props.navigator.push({
@@ -63,7 +74,16 @@ class Root extends Component {
           <Text>lattitude: {this.state.position.latitude}</Text>
           <Text>longitude: {this.state.position.longitude}</Text>
         </View>
-        <Icon name="trash" size={50} color="#900" />
+        <View style={styles.stars}>
+        <Icon name="minus" size={50} color="red" onPress={() =>  this.changePrice("minus")}/>
+        <Icon name="usd" size={50} color={this.state.price >= 4 ? "gold" : "black"} />
+        <Icon name="usd" size={50} color={this.state.price >= 3 ? "gold" : "black"} />
+        <Icon name="usd" size={50} color={this.state.price >= 2 ? "gold" : "black"} />
+        <Icon name="usd" size={50} color={this.state.price >= 1 ? "gold" : "black"} />
+
+        <Icon name="plus" size={50} color="green" onPress={() =>  this.changePrice("add")}/>
+
+        </View>
       </View>
     );
   }
@@ -77,6 +97,13 @@ class Root extends Component {
     justifyContent: 'center',
     alignItems: 'center',
   },
+  title: {
+    fontFamily: 'Futura-CondensedExtraBold',
+  },
+  stars:{
+    flex: 1,
+    flexDirection: 'row',
+  }
   });
 
   export default Root;
