@@ -12,6 +12,7 @@ import { Text,
         Button,
         ActivityIndicatorIOS,
         Platform,
+        Picker,
         } from 'react-native';
 
 const LATITUDE_DELTA = 0.0922;
@@ -62,28 +63,45 @@ class Root extends Component {
   }
 
   render() {
+    var TouchableElement = TouchableHighlight;
+    if (Platform.OS === 'android') {
+    TouchableElement = TouchableNativeFeedback;
+    }
     return (
       <View style={styles.root}>
-        <Text style={styles.title}>Welcome To DinDin</Text>
-        <Text>We Pick the Resturant</Text>
-        <View style={styles.height}>
-          <TouchableHighlight onPress={ this.navigate.bind(this, 'login') } style={styles.button}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableHighlight>
-          <Text>your location</Text>
-          <Text>lattitude: {this.state.position.latitude}</Text>
-          <Text>longitude: {this.state.position.longitude}</Text>
+        <View style={styles.titleView}>
+          <Text style={styles.title}> Welcome To </Text>
+          <Text style={styles.title}> DinDin </Text>
+          <Text style={styles.title}> We Pick the Resturant </Text>
         </View>
-        <View style={styles.stars}>
-        <Icon name="minus" size={50} color="red" onPress={() =>  this.changePrice("minus")}/>
-        <Icon name="usd" size={50} color={this.state.price >= 4 ? "gold" : "black"} />
-        <Icon name="usd" size={50} color={this.state.price >= 3 ? "gold" : "black"} />
-        <Icon name="usd" size={50} color={this.state.price >= 2 ? "gold" : "black"} />
-        <Icon name="usd" size={50} color={this.state.price >= 1 ? "gold" : "black"} />
-
-        <Icon name="plus" size={50} color="green" onPress={() =>  this.changePrice("add")}/>
-
+        <View style={styles.component}>
+          <Text style={styles.lable}> How much </Text>
+          <View style={styles.stars}>
+            <Icon name="plus" size={30} color="green" onPress={() =>  this.changePrice("add")}/>
+            <Icon name="usd" size={50} color={this.state.price >= 4 ? "gold" : "black"} />
+            <Icon name="usd" size={50} color={this.state.price >= 3 ? "gold" : "black"} />
+            <Icon name="usd" size={50} color={this.state.price >= 2 ? "gold" : "black"} />
+            <Icon name="usd" size={50} color={this.state.price >= 1 ? "gold" : "black"} />
+            <Icon name="minus" size={30} color="red" onPress={() =>  this.changePrice("minus")}/>
+          </View>
         </View>
+        <View style={styles.component}>
+          <Text style={styles.lable}> How far </Text>
+          <Picker
+            selectedValue={this.state.radius}
+            onValueChange={(itemValue) => this.setState({radius: itemValue})}
+            style={{width: 100}} >
+            <Picker.Item label="1 mile" value='1' key='1'/>
+            <Picker.Item label="2 miles" value='2' key='2'/>
+            <Picker.Item label="5 miles" value='5' key='3'/>
+            <Picker.Item label="10 miles" value='10' key='3'/>
+          </Picker>
+        </View>
+        <TouchableElement
+          style={styles.button}
+          onPress={() => this.getResturaunt()}>
+          <Text style={styles.buttonText}> Find Food </Text>
+        </TouchableElement>
       </View>
     );
   }
@@ -92,17 +110,57 @@ class Root extends Component {
   const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#B3CC57',
+    backgroundColor: 'skyblue',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    width: "100%",
+  },
+  title: {
+    fontFamily: 'Futura-CondensedExtraBold',
+    fontSize: 36,
+    textShadowOffset: {width: 3, height: 3},
+    textShadowColor: "blue",
+  },
+  titleView: {
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {
-    fontFamily: 'Futura-CondensedExtraBold',
-  },
   stars:{
     flex: 1,
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  button: {
+    flex: 1,
+    backgroundColor: 'steelblue',
+    width: 300,
+    borderWidth: 3,
+    borderColor: 'black',
+    borderRadius: 7,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText:{
+    fontFamily: 'Futura-CondensedExtraBold',
+    fontSize: 24,
+    textShadowOffset: {width: 1, height: 1},
+    textShadowColor: "blue",
+  },
+  lable:{
+    fontFamily: 'Futura-CondensedExtraBold',
+    fontSize: 24,
+    textShadowOffset: {width: 1, height: 1},
+    textShadowColor: "blue",
+  },
+  component: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: "space-around",
+    alignItems: "center",
   }
   });
 
