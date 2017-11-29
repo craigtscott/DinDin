@@ -14,8 +14,8 @@
    View
  } from 'react-native';
 
-import Show from './show/show';
-import Root from './root/root';
+import Show from './components/show/show';
+import Root from './components/root/root';
 
 
 class DinDin extends Component{
