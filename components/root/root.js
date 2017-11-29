@@ -44,6 +44,7 @@ class Root extends Component {
     {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
   );}
 
+
   changePrice(direction){
     let newPrice = this.state.price;
     // debugger;
@@ -56,9 +57,14 @@ class Root extends Component {
   }
 
 
-  navigate(routeName) {
+  navigate() {
     this.props.navigator.push({
-      name: routeName
+      name: "show",
+      passProps: {
+        position: this.state.position,
+        price: this.state.price,
+        radius: this.state.radius
+      }
     });
   }
 
@@ -99,7 +105,7 @@ class Root extends Component {
         </View>
         <TouchableElement
           style={styles.button}
-          onPress={() => this.getResturaunt()}>
+          onPress={this.navigate.bind(this)}>
           <Text style={styles.buttonText}> Find Food </Text>
         </TouchableElement>
       </View>

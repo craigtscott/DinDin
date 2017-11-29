@@ -14,7 +14,8 @@
    View
  } from 'react-native';
 
-import Root from './root';
+import Show from './show/show';
+import Root from './root/root';
 
 
 class DinDin extends Component{
@@ -23,6 +24,9 @@ class DinDin extends Component{
     console.log(route);
     if(route.name === 'root') {
       return <Root navigator={navigator} />;
+    }
+    if(route.name === 'show') {
+      return <Show navigator={navigator} />;
     }
   }
 
