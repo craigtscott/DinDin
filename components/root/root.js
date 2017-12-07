@@ -20,6 +20,8 @@ const LATITUDE_DELTA = 0.0922;
 class Root extends Component {
   constructor(){
     super();
+    this._fetchYelpPost = this._fetchYelpPost.bind(this);
+    this._fetchYelpGet = this._fetchYelpGet.bind(this);
 
     this.state = {
       position: {
@@ -54,6 +56,44 @@ class Root extends Component {
       newPrice = this.state.price - 1;
     }
     this.setState({price: newPrice});
+  }
+
+  _fetchYelpPost(){
+    var details = {
+      'client_id': '-qWaHcsd1FNhDOLm5IG1zw',
+      'client_secret': '2Z8KwxPhOiPr2NHmXzSGMppsocPykN4wLHaSl59icE0IRNNyEwHfCKO85ZZ071no',
+      'grant_type': 'client_credentials'
+    };
+
+    var formBody = [];
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+
+    fetch('https://api.yelp.com/oauth2/token', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: formBody
+    })
+  }
+
+  _fetchYelpGet(){
+    let data = {
+      method: 'GET',
+      headers: {
+        'Accept':       'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization':'Bearer y3Y6d_hVuQYBVSsBWZPhSJHsGx1uigpSZu5LGYv1Q3jTh6XMpOvaXG0O8NjNpFg5wJ3j2lE96pFTa8AXA7Mffg40PV6sOjbvE2R10Ie3kUz24Y_ONfCVpufsPH0gWnYx'
+      }
+    }
+    return fetch('https://api.yelp.com/v3/businesses/search?term=restaurants&location=37.786882,-122.399972&limit=1', data)
+            .then(response => response.json());
   }
 
 
@@ -108,6 +148,17 @@ class Root extends Component {
           onPress={this.navigate.bind(this)}>
           <Text style={styles.buttonText}> Find Food </Text>
         </TouchableElement>
+        <TouchableHighlight onPress={this._fetchYelpPost}>
+          <Text style={styles.welcome}>
+            Checkout Yelp post request
+          </Text>
+        </TouchableHighlight>
+        <TouchableHighlight onPress={this._fetchYelpGet}>
+          <Text style={styles.welcome}>
+            Checkout Yelp get request
+          </Text>
+        </TouchableHighlight>
+
       </View>
     );
   }

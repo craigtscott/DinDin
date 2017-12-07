@@ -48,6 +48,12 @@
 	<dict>
 		<key>NSExceptionDomains</key>
 		<dict>
+			<key>api.yelp.com</key>
+			<dict/>
+			<key>NSExceptionRequiresForwardSecrecy</key>
+			<false/>
+			<key>NSExceptionAllowsInsecureHTTPLoads</key>
+			<true/>
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>

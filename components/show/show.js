@@ -43,7 +43,7 @@ class Show extends Component{
     TouchableElement = TouchableNativeFeedback;
     }
     return(
-      <View>
+      <View style={styles.show}>
         <Text> show </Text>
         <Text style={styles.lable}> Check out restaurants </Text>
 
@@ -60,20 +60,26 @@ class Show extends Component{
 
 const styles = StyleSheet.create({
 
-
-button: {
+show:{
   flex: 1,
+  width: "100%",
   backgroundColor: 'steelblue',
-  width: 300,
+  marginTop: 20,
+},
+button: {
+
+  backgroundColor: 'steelblue',
+  width: 100,
   borderWidth: 3,
   borderColor: 'black',
   borderRadius: 7,
   alignItems: 'center',
   justifyContent: 'center',
+  height:100,
 },
 buttonText:{
   fontFamily: 'Futura-CondensedExtraBold',
-  fontSize: 24,
+  fontSize: 30,
   textShadowOffset: {width: 1, height: 1},
   textShadowColor: "blue",
 },
