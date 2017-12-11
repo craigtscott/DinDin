@@ -28,7 +28,7 @@ class DinDin extends Component{
     if(route.name === 'show') {
       return <Show navigator={navigator} />;
     }
-  };
+  }
 
   render(){
     return(
