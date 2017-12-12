@@ -31,11 +31,11 @@ class Show extends Component{
   componentWillMount() {
     this._fetchYelpPost();
     this._fetchYelpGet();
-    debugger;
+    // debugger;
 
   }
   componentHasMount() {
-    debugger;
+    // debugger;
   }
 
   _fetchYelpPost(){
@@ -72,7 +72,7 @@ class Show extends Component{
           'Authorization':'Bearer y3Y6d_hVuQYBVSsBWZPhSJHsGx1uigpSZu5LGYv1Q3jTh6XMpOvaXG0O8NjNpFg5wJ3j2lE96pFTa8AXA7Mffg40PV6sOjbvE2R10Ie3kUz24Y_ONfCVpufsPH0gWnYx'
         }
       };
-      fetch('https://api.yelp.com/v3/businesses/search?term=restaurants&location=37.786882,-122.399972&limit=1', data)
+      fetch('https://api.yelp.com/v3/businesses/search?term=restaurants&location=37.786882,-122.399972&limit=10', data)
               .then(response => response.json())
               .then((responceJson) => this.setState({resp: responceJson}))
               .catch(error => {
@@ -80,6 +80,10 @@ class Show extends Component{
     });;
 
   };
+
+  _getReturaunt() {
+    debugger;
+  }
 
 
     navigate() {
@@ -90,6 +94,7 @@ class Show extends Component{
 
   render(){
     console.log(this.state.resp);
+    this._getReturaunt();
     var TouchableElement = TouchableHighlight;
     if (Platform.OS === 'android') {
     TouchableElement = TouchableNativeFeedback;
