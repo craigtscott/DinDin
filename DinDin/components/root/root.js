@@ -84,7 +84,31 @@ class Root extends Component {
   }
 
   _fetchYelpGet(){
-    let data = {
+    let access = {
+      method: 'GET',
+      headers: {
+        'Accept':       'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization':'Bearer y3Y6d_hVuQYBVSsBWZPhSJHsGx1uigpSZu5LGYv1Q3jTh6XMpOvaXG0O8NjNpFg5wJ3j2lE96pFTa8AXA7Mffg40PV6sOjbvE2R10Ie3kUz24Y_ONfCVpufsPH0gWnYx'
+      }
+    }
+
+    var nav = this.props.navigator
+    fetch('https://api.yelp.com/v3/businesses/search?term=restaurants&location=37.786882,-122.399972&limit=1', access)
+        .then(function(response){
+            return response.json()
+            }).then(function(data){
+              nav.push({
+                name: "Results",
+                data: data
+              })
+            }).catch(function(error){
+          console.log("Error:", error)
+        });
+  }
+
+  _fetchYelpGet2(){
+    let access = {
       method: 'GET',
       headers: {
         'Accept':       'application/json',
@@ -93,8 +117,9 @@ class Root extends Component {
       }
     }
     return fetch('https://api.yelp.com/v3/businesses/search?term=restaurants&location=37.786882,-122.399972&limit=1', data)
-            .then(response => response.json());
+           .then(response => response.json());
   }
+
 
 
   navigate() {

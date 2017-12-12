@@ -19,6 +19,7 @@ import {
 import NavigationExperimental from 'react-native-deprecated-custom-components';
 
 import Show from './components/show/show';
+import Results from './components/show/Results';
 import Root from './components/root/root';
 
 
@@ -38,6 +39,9 @@ export default class App extends Component<{}> {
   }
   if(route.name === 'show') {
     return <Show navigator={navigator} />;
+  }
+  if(route.name === 'Results') {
+    return <Results navigator={navigator} />;
   }
 }
 
