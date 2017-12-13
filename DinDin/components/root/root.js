@@ -111,7 +111,6 @@ class Root extends Component {
 
 
   navigate() {
-    debugger;
     this.props.navigator.push({
       name: "show",
       passProps: {

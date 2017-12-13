@@ -29,16 +29,19 @@ class Show extends Component{
   }
 
   componentWillMount() {
-    debugger;
 
   }
-  componentHasMount() {
-    debugger;
+  componentDidMount() {
+    this._pickResturaunt();
   }
   componentWillReceiveProps() {
-    debugger;
   }
 
+  _pickResturaunt() {
+    let ran = Math.floor(Math.random() * this.state.resp.businesses.length) + 1;
+    // debugger;
+    this.setState({resturant: this.state.resp.businesses[ran].name});
+  }
 
 
     navigate() {
@@ -56,7 +59,7 @@ class Show extends Component{
       <View style={styles.show}>
         <Text> show </Text>
         <Text style={styles.lable}> Check out restaurants </Text>
-        <Text>{this.state.radius}</Text>
+        <Text>{this.state.resturant}</Text>
         <TouchableElement
           style={styles.button}
           onPress={this.navigate.bind(this)}>
