@@ -30,6 +30,7 @@ class Root extends Component {
       },
       price: 4,
       radius: 10,
+      resp: [null],
     };
   }
   componentDidMount() {
@@ -49,7 +50,6 @@ class Root extends Component {
 
   changePrice(direction){
     let newPrice = this.state.price;
-    // debugger;
     if (direction === "add" && this.state.price <= 4){
       newPrice = this.state.price + 1;
     } else if(this.state.price > 1){
@@ -80,55 +80,45 @@ class Root extends Component {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: formBody
-    })
+    });
   }
 
-  _fetchYelpGet(){
-    let access = {
-      method: 'GET',
-      headers: {
-        'Accept':       'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization':'Bearer y3Y6d_hVuQYBVSsBWZPhSJHsGx1uigpSZu5LGYv1Q3jTh6XMpOvaXG0O8NjNpFg5wJ3j2lE96pFTa8AXA7Mffg40PV6sOjbvE2R10Ie3kUz24Y_ONfCVpufsPH0gWnYx'
-      }
-    }
 
-    var nav = this.props.navigator
-    fetch('https://api.yelp.com/v3/businesses/search?term=restaurants&location=37.786882,-122.399972&limit=1', access)
-        .then(function(response){
-            return response.json()
-            }).then(function(data){
-              nav.push({
-                name: "Results",
-                data: data
-              })
-            }).catch(function(error){
-          console.log("Error:", error)
-        });
-  }
+    _fetchYelpGet() {
+        let data = {
+          method: 'GET',
+          headers: {
+            'Accept':       'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization':'Bearer y3Y6d_hVuQYBVSsBWZPhSJHsGx1uigpSZu5LGYv1Q3jTh6XMpOvaXG0O8NjNpFg5wJ3j2lE96pFTa8AXA7Mffg40PV6sOjbvE2R10Ie3kUz24Y_ONfCVpufsPH0gWnYx'
+          }
+        };
+        fetch('https://api.yelp.com/v3/businesses/search?term=restaurants&location=37.786882,-122.399972&limit=10', data)
+                .then(response => response.json())
+                .then((responceJson) => this.setState({resp: responceJson}))
+                .then(this.navigate.bind(this))
+                .catch(error => {
+        console.error(error);
+      });;
 
-  _fetchYelpGet2(){
-    let access = {
-      method: 'GET',
-      headers: {
-        'Accept':       'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization':'Bearer y3Y6d_hVuQYBVSsBWZPhSJHsGx1uigpSZu5LGYv1Q3jTh6XMpOvaXG0O8NjNpFg5wJ3j2lE96pFTa8AXA7Mffg40PV6sOjbvE2R10Ie3kUz24Y_ONfCVpufsPH0gWnYx'
-      }
-    }
-    return fetch('https://api.yelp.com/v3/businesses/search?term=restaurants&location=37.786882,-122.399972&limit=1', data)
-           .then(response => response.json());
+    };
+
+  _getResturaunt() {
+    this._fetchYelpPost();
+    this._fetchYelpGet();
   }
 
 
 
   navigate() {
+    debugger;
     this.props.navigator.push({
       name: "show",
       passProps: {
         position: this.state.position,
         price: this.state.price,
-        radius: this.state.radius
+        radius: this.state.radius,
+        resp: this.state.resp
       }
     });
   }
@@ -180,7 +170,7 @@ class Root extends Component {
         </TouchableHighlight>
         <TouchableElement
           style={styles.button}
-          onPress={this.navigate.bind(this)}>
+          onPress={ () => this._getResturaunt()}>
           <Text style={styles.buttonText}> Find Food </Text>
         </TouchableElement>
 
