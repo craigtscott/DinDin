@@ -25,13 +25,9 @@ class Show extends Component{
       radius: this.props.navigator.state.routeStack[1].passProps.radius,
       resp: this.props.navigator.state.routeStack[1].passProps.resp,
       access_token: this.props.navigator.state.routeStack[1].passProps.access_token,
-<<<<<<< HEAD
-      resturant:"",
-      skip: {}
-=======
       reviews: [null],
       resturant: {},
->>>>>>> 596b8d63abc3a838c2bf1b62c320ef2c394fe363
+
 
     };
   }
@@ -53,17 +49,11 @@ class Show extends Component{
     console.log(this.state.businesses);
     debugger;
     let ran = Math.floor(Math.random() * this.state.resp.businesses.length) + 1;
-<<<<<<< HEAD
-    this.setState({resturant: this.state.resp.businesses[ran].name});
-=======
     this.setState({resturant: this.state.resp.businesses[ran]});
-
-
->>>>>>> 596b8d63abc3a838c2bf1b62c320ef2c394fe363
   }
 
   _fetchYelpGetReviews() {
-    let authorization = this.state.access_token["token_type"]+ " " +this.state.access_token["access_token"]
+    let authorization = this.state.access_token["token_type"]+ " " +this.state.access_token["access_token"];
     let data = {
       method: 'GET',
       headers: {
@@ -75,7 +65,7 @@ class Show extends Component{
 
       console.log(this.state.resturant.id);
 
-      let url = "https://api.yelp.com/v3/businesses/" + this.state.resturant.id + "/reviews"
+      let url = "https://api.yelp.com/v3/businesses/" + this.state.resturant.id + "/reviews";
       console.log(url);
       fetch(url, data)
               .then(response => response.json())
