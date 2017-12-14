@@ -24,6 +24,7 @@ class Show extends Component{
       radius: this.props.navigator.state.routeStack[1].passProps.radius,
       resp: this.props.navigator.state.routeStack[1].passProps.resp,
       resturant:"",
+      skip: {}
 
     };
   }
@@ -39,9 +40,9 @@ class Show extends Component{
 
   _pickResturaunt() {
     let ran = Math.floor(Math.random() * this.state.resp.businesses.length) + 1;
-    // debugger;
     this.setState({resturant: this.state.resp.businesses[ran].name});
   }
+
 
 
     navigate() {
