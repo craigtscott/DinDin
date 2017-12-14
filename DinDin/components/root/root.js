@@ -22,6 +22,7 @@ class Root extends Component {
     super();
     this._fetchYelpPost = this._fetchYelpPost.bind(this);
     this._fetchYelpGet = this._fetchYelpGet.bind(this);
+    this._getResturaunt = this._getResturaunt.bind(this);
 
     this.state = {
       position: {
@@ -31,6 +32,7 @@ class Root extends Component {
       price: 4,
       radius: 10,
       resp: [null],
+      access_token: {},
     };
   }
   componentDidMount() {
@@ -43,9 +45,11 @@ class Root extends Component {
         longitude: long,
       };
       this.setState({position: initialpostiton});
-    }, (error) => alert(JSON.stringify(error)),
-    {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
-  );}
+      }, (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
+    this._fetchYelpPost();
+  }
 
 
   changePrice(direction){
@@ -80,35 +84,43 @@ class Root extends Component {
         'Content-Type': 'application/x-www-form-urlencoded'
       },
       body: formBody
-    });
+    }).then(response => response.json())
+      .then((responceJson) => this.setState({access_token: responceJson}))
+      .catch(error => {
+        console.error(error);
+      });
+
   }
 
+  _fetchYelpGet() {
+    let authorization = this.state.access_token["token_type"]+ " " +this.state.access_token["access_token"]
+    let data = {
+      method: 'GET',
+      headers: {
+        'Accept':       'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': authorization,
+        }
+      };
 
-    _fetchYelpGet() {
-        let data = {
-          method: 'GET',
-          headers: {
-            'Accept':       'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Authorization':'Bearer y3Y6d_hVuQYBVSsBWZPhSJHsGx1uigpSZu5LGYv1Q3jTh6XMpOvaXG0O8NjNpFg5wJ3j2lE96pFTa8AXA7Mffg40PV6sOjbvE2R10Ie3kUz24Y_ONfCVpufsPH0gWnYx'
-          }
-        };
-        fetch('https://api.yelp.com/v3/businesses/search?term=restaurants&location=37.786882,-122.399972&limit=10', data)
-                .then(response => response.json())
-                .then((responceJson) => this.setState({resp: responceJson}))
-                .then(this.navigate.bind(this))
-                .catch(error => {
+      let latlng = this.state.position.latitude + "," + this.state.position.longitude
+      let price_range = this.state.price
+      let distance = this.state.radius * 1609.34
+      let url = "https://api.yelp.com/v3/businesses/search?term=restaurants&location=" +latlng + "&price=" + price_range + "&distance=" + distance + "&rating>=3"
+      fetch(url, data)
+              .then(response => response.json())
+              .then((responceJson) => this.setState({resp: responceJson}))
+              .then(this.navigate.bind(this))
+              .catch(error => {
         console.error(error);
       });;
 
     };
 
   _getResturaunt() {
-    this._fetchYelpPost();
+    // this._fetchYelpPost();
     this._fetchYelpGet();
   }
-
-
 
   navigate() {
     this.props.navigator.push({
@@ -117,12 +129,14 @@ class Root extends Component {
         position: this.state.position,
         price: this.state.price,
         radius: this.state.radius,
-        resp: this.state.resp
+        resp: this.state.resp,
+        access_token: this.state.access_token
       }
     });
   }
 
   render() {
+
     var TouchableElement = TouchableHighlight;
     if (Platform.OS === 'android') {
     TouchableElement = TouchableNativeFeedback;
@@ -157,16 +171,6 @@ class Root extends Component {
             <Picker.Item label="10 miles" value='10' key='3'/>
           </Picker>
         </View>
-        <TouchableHighlight onPress={this._fetchYelpPost}>
-          <Text style={styles.welcome}>
-            Checkout Yelp post request
-          </Text>
-        </TouchableHighlight>
-        <TouchableHighlight onPress={this._fetchYelpGet}>
-          <Text style={styles.welcome}>
-            Checkout Yelp get request
-          </Text>
-        </TouchableHighlight>
         <TouchableElement
           style={styles.button}
           onPress={ () => this._getResturaunt()}>
