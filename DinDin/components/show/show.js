@@ -23,6 +23,7 @@ class Show extends Component{
       price: this.props.navigator.state.routeStack[1].passProps.price,
       radius: this.props.navigator.state.routeStack[1].passProps.radius,
       resp: this.props.navigator.state.routeStack[1].passProps.resp,
+      access_token: this.props.navigator.state.routeStack[1].passProps.access_token,
       resturant:"",
 
     };
@@ -51,6 +52,7 @@ class Show extends Component{
     }
 
   render(){
+    console.log(this.state.access_token);
     var TouchableElement = TouchableHighlight;
     if (Platform.OS === 'android') {
     TouchableElement = TouchableNativeFeedback;
