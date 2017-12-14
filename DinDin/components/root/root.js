@@ -106,7 +106,7 @@ class Root extends Component {
       let latlng = this.state.position.latitude + "," + this.state.position.longitude
       let price_range = this.state.price
       let distance = this.state.radius * 1609.34
-      let url = "https://api.yelp.com/v3/businesses/search?term=restaurants&location=" +latlng + "&price=" + price_range + "&distance=" + distance + "&rating>=3"
+      let url = "https://api.yelp.com/v3/businesses/search?term=restaurants&location=" +latlng + "&price=" + price_range + "&distance=" + distance + "&rating>=3" + "&is_closed=false"
       fetch(url, data)
               .then(response => response.json())
               .then((responceJson) => this.setState({resp: responceJson}))
