@@ -12,6 +12,7 @@ import { Text,
         ActivityIndicatorIOS,
         Platform,
         Picker,
+        Image,
         } from 'react-native';
 
 class Show extends Component{
@@ -24,25 +25,57 @@ class Show extends Component{
       radius: this.props.navigator.state.routeStack[1].passProps.radius,
       resp: this.props.navigator.state.routeStack[1].passProps.resp,
       access_token: this.props.navigator.state.routeStack[1].passProps.access_token,
-      resturant:"",
+      reviews: [null],
+      resturant: {},
 
     };
   }
 
   componentWillMount() {
-
+    this._pickResturaunt();
+    //console.log(this.state);
   }
   componentDidMount() {
-    this._pickResturaunt();
+    // this._pickResturaunt();
+    // if (this.state.restaurant !== {}){
+      this._fetchYelpGetReviews();
+    // }
   }
   componentWillReceiveProps() {
   }
 
   _pickResturaunt() {
     let ran = Math.floor(Math.random() * this.state.resp.businesses.length) + 1;
-    // debugger;
-    this.setState({resturant: this.state.resp.businesses[ran].name});
+    this.setState({resturant: this.state.resp.businesses[ran]});
+
+
   }
+
+  _fetchYelpGetReviews() {
+    let authorization = this.state.access_token["token_type"]+ " " +this.state.access_token["access_token"]
+    let data = {
+      method: 'GET',
+      headers: {
+        'Accept':       'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': authorization,
+        }
+      };
+
+      console.log(this.state.resturant.id);
+
+      let url = "https://api.yelp.com/v3/businesses/" + this.state.resturant.id + "/reviews"
+      console.log(url);
+      fetch(url, data)
+              .then(response => response.json())
+              .then((responceJson) => this.setState({reviews: responceJson}))
+              .catch(error => {
+        console.error(error);
+      });
+      debugger;
+      console.log(this.state.reviews);
+
+    };
 
 
     navigate() {
@@ -53,6 +86,10 @@ class Show extends Component{
 
   render(){
     console.log(this.state.access_token);
+
+    console.log(this.state);
+
+
     var TouchableElement = TouchableHighlight;
     if (Platform.OS === 'android') {
     TouchableElement = TouchableNativeFeedback;
@@ -61,11 +98,22 @@ class Show extends Component{
       <View style={styles.show}>
         <Text> show </Text>
         <Text style={styles.lable}> Check out restaurants </Text>
-        <Text>{this.state.resturant}</Text>
+        <Text>Name of the Restaurant: {this.state.resturant.name}</Text>
+        <Text>Phone: {this.state.resturant.display_phone}</Text>
+        <Text>Rating: {this.state.resturant.rating}</Text>
+          <Image
+          style={{width: 50, height: 50}}
+          source={{uri: this.state.restaurant.image_url}}
+        />
         <TouchableElement
           style={styles.button}
           onPress={this.navigate.bind(this)}>
           <Text style={styles.buttonText}> Back </Text>
+        </TouchableElement>
+        <TouchableElement
+          style={styles.button}
+          onPress={this._fetchYelpGetReviews.bind(this)}>
+          <Text style={styles.buttonText}> reviews </Text>
         </TouchableElement>
       </View>
     );
