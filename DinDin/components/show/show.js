@@ -40,6 +40,8 @@ class Show extends Component{
   }
 
   _pickResturaunt() {
+    console.log(this.state.businesses);
+    debugger;
     let ran = Math.floor(Math.random() * this.state.resp.businesses.length) + 1;
     this.setState({resturant: this.state.resp.businesses[ran].name});
   }
