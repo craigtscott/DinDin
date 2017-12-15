@@ -30,9 +30,12 @@ class Show extends Component{
       radius: this.props.navigator.state.routeStack[1].passProps.radius,
       resp: this.props.navigator.state.routeStack[1].passProps.resp,
       access_token: this.props.navigator.state.routeStack[1].passProps.access_token,
+      ran: ran,
       reviews: [null],
       resturant: this.props.navigator.state.routeStack[1].passProps.resp.businesses[ran],
-      results: dataStore.cloneWithRows(this.props.navigator.state.routeStack[1].passProps.resp.businesses)
+      results: dataStore.cloneWithRows(this.props.navigator.state.routeStack[1].passProps.resp.businesses),
+      skip: []
+
 
     };
 
@@ -48,12 +51,21 @@ class Show extends Component{
 
   }
 
-  // _pickResturaunt() {
-  //   let ran = Math.floor(Math.random() * this.state.resp.businesses.length) + 1;
-  //   this.setState({resturant: this.state.resp.businesses[ran]});
-  //
-  //
-  // }
+  _pickResturaunt() {
+    newSkip = this.state.skip;
+    newSkip.push(this.state.ran);
+    this.setState({skip: newSkip});
+    ran = Math.floor(Math.random() * this.state.resp.businesses.length) + 1;
+    while (this.state.skip.includes(ran)) {
+      ran = Math.floor(Math.random() * this.state.resp.businesses.length) + 1;
+    }
+
+    this.setState({resturant: this.state.resp.businesses[ran],
+                    ran: ran});
+
+    this._fetchYelpGetReviews();
+    // this._fetchYelpGetReviews2();
+  }
 
 
   _fetchYelpGetReviews() {
@@ -104,6 +116,11 @@ class Show extends Component{
           style={{width: 80, height: 80, justifyContent: 'flex-start'}} />
 
 
+        <TouchableElement
+          style={styles.button}
+          onPress={this._pickResturaunt.bind(this)}>
+          <Text style={styles.buttonText}> Skip </Text>
+        </TouchableElement>
         <TouchableElement
           style={styles.button}
           onPress={this.navigate.bind(this)}>
