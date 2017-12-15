@@ -22,6 +22,8 @@ class Show extends Component{
     super(props);
     var dataStore = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 
+    let ran = Math.floor(Math.random() * this.props.navigator.state.routeStack[1].passProps.resp.businesses.length) + 1;
+
     this.state = {
       position: this.props.navigator.state.routeStack[1].passProps.position,
       price: this.props.navigator.state.routeStack[1].passProps.price,
@@ -29,32 +31,50 @@ class Show extends Component{
       resp: this.props.navigator.state.routeStack[1].passProps.resp,
       access_token: this.props.navigator.state.routeStack[1].passProps.access_token,
       reviews: [null],
-      resturant: {},
+      resturant: this.props.navigator.state.routeStack[1].passProps.resp.businesses[ran],
       results: dataStore.cloneWithRows(this.props.navigator.state.routeStack[1].passProps.resp.businesses)
+
     };
+    console.log("const");
+    debugger;
+    this._fetchYelpGetReviews();
+    console.log("inside const");
+    console.log(this.state.reviews);
+
   }
 
   componentWillMount() {
-    this._pickResturaunt();
-    //console.log(this.state);
+
+  console.log("will mount");
+  console.log("inside willmount");
+  console.log(this.state.reviews);
   }
   componentDidMount() {
-    //this._pickResturaunt();
-    // if (this.state.restaurant !== {}){
-      this._fetchYelpGetReviews();
+    // if (this.state.reviews[0]){
+    //
+    //   this._fetchYelpGetReviews2();
     // }
+
+    console.log("didmount");
+    console.log("inside didmount");
+    console.log(this.state.reviews);
+
   }
   componentDidUpdate() {
-
-    //this._fetchYelpGetReviews2();
+    //debugger;
+   //this._fetchYelpGetReviews2();
+  console.log("didupdate");
+  console.log("inside didmount");
+  console.log(this.state.reviews);
   }
 
-  _pickResturaunt() {
-    console.log(this.state.businesses);
-    debugger;
-    let ran = Math.floor(Math.random() * this.state.resp.businesses.length) + 1;
-    this.setState({resturant: this.state.resp.businesses[ran]});
-  }
+  // _pickResturaunt() {
+  //   let ran = Math.floor(Math.random() * this.state.resp.businesses.length) + 1;
+  //   this.setState({resturant: this.state.resp.businesses[ran]});
+  //
+  //
+  // }
+
 
   _fetchYelpGetReviews() {
     let authorization = this.state.access_token["token_type"]+ " " +this.state.access_token["access_token"];
@@ -67,17 +87,20 @@ class Show extends Component{
         }
       };
 
-      //console.log(this.state.resturant.id);
+      console.log(this.state.resturant.id);
 
       let url = "https://api.yelp.com/v3/businesses/" + this.state.resturant.id + "/reviews";
       console.log(url);
       fetch(url, data)
               .then(response => response.json())
-              .then((responceJson) => this.setState({reviews: responceJson}))
+              .then((responceJson) => this.setState({reviews: responceJson.reviews}))
+              //.then(()=> {this._fetchYelpGetReviews2.bind(this);})
               .catch(error => {
         console.error(error);
       });
       debugger;
+      console.log("inside function");
+
       console.log(this.state.reviews);
 
     }
@@ -87,17 +110,13 @@ class Show extends Component{
       var dataStore = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       console.log(dataStore);
       this.setState({
-          results: dataStore.cloneWithRows(this.state.reviews.reviews)
+          results: dataStore.cloneWithRows(this.state.reviews)
       });
       //debugger;
       console.log(this.state);
       console.log(this.state.reviews);
 
     }
-
-
-
-
 
     navigate() {
       this.props.navigator.push({
@@ -107,12 +126,15 @@ class Show extends Component{
 
   render(){
     //console.log(this.state.access_token);
+    console.log("render");
 
     console.log(this.state);
-    // console.log(this.state.restaurant.id);
-    // console.log(this.state.restaurant.image_url);
-
-
+    console.log("inside render");
+    console.log(this.state.reviews);
+    // if (this.state.reviews[0]){
+    //
+    //   this._fetchYelpGetReviews2();
+    // }
     var TouchableElement = TouchableHighlight;
     if (Platform.OS === 'android') {
     TouchableElement = TouchableNativeFeedback;
@@ -132,11 +154,6 @@ class Show extends Component{
           style={styles.button}
           onPress={this.navigate.bind(this)}>
           <Text style={styles.buttonText}> Back </Text>
-        </TouchableElement>
-        <TouchableElement
-          style={styles.button}
-          onPress={this._fetchYelpGetReviews.bind(this)}>
-          <Text style={styles.buttonText}> reviews </Text>
         </TouchableElement>
         <TouchableElement
           style={styles.button}
