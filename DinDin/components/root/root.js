@@ -1,6 +1,7 @@
 'use strict';
 import React, { Component } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 import { Text,
         View,
         StyleSheet,
@@ -13,6 +14,8 @@ import { Text,
         ActivityIndicatorIOS,
         Platform,
         Picker,
+        Image,
+        ImageBackground,
         } from 'react-native';
 
 const LATITUDE_DELTA = 0.0922;
@@ -143,7 +146,9 @@ class Root extends Component {
     }
     return (
       <View style={styles.root}>
+        
         <View style={styles.titleView}>
+
           <Text style={styles.title}> Welcome To </Text>
           <Text style={styles.title}> DinDin </Text>
           <Text style={styles.title}> We Pick the Resturant </Text>
@@ -237,7 +242,8 @@ class Root extends Component {
     flexDirection: 'column',
     justifyContent: "space-around",
     alignItems: "center",
-  }
+  },
+
   });
 
   export default Root;
