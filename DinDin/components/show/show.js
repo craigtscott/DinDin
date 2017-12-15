@@ -118,12 +118,12 @@ class Show extends Component{
     );
   }
   renderResult(result) {
+
     return (
       <TouchableOpacity>
-
        <View style={{flexDirection: 'column', justifyContent: 'center'}}>
-         <Text style={{fontWeight: 'bold'}}>{`${result.text}`}</Text>
          <Text>Rating: {`${result.rating}`}</Text>
+         <Text style={{fontWeight: 'bold'}}>{`${result.text}`}</Text>
        </View>
       </TouchableOpacity>
     );
