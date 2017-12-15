@@ -35,37 +35,17 @@ class Show extends Component{
       results: dataStore.cloneWithRows(this.props.navigator.state.routeStack[1].passProps.resp.businesses)
 
     };
-    console.log("const");
-    debugger;
-    this._fetchYelpGetReviews();
-    console.log("inside const");
-    console.log(this.state.reviews);
 
   }
 
   componentWillMount() {
-
-  console.log("will mount");
-  console.log("inside willmount");
-  console.log(this.state.reviews);
+    this._fetchYelpGetReviews();
   }
   componentDidMount() {
-    // if (this.state.reviews[0]){
-    //
-    //   this._fetchYelpGetReviews2();
-    // }
-
-    console.log("didmount");
-    console.log("inside didmount");
-    console.log(this.state.reviews);
 
   }
   componentDidUpdate() {
-    //debugger;
-   //this._fetchYelpGetReviews2();
-  console.log("didupdate");
-  console.log("inside didmount");
-  console.log(this.state.reviews);
+
   }
 
   // _pickResturaunt() {
@@ -86,36 +66,20 @@ class Show extends Component{
         'Authorization': authorization,
         }
       };
-
-      console.log(this.state.resturant.id);
-
       let url = "https://api.yelp.com/v3/businesses/" + this.state.resturant.id + "/reviews";
-      console.log(url);
       fetch(url, data)
               .then(response => response.json())
               .then((responceJson) => this.setState({reviews: responceJson.reviews}))
-              //.then(()=> {this._fetchYelpGetReviews2.bind(this);})
+              .then(this._fetchYelpGetReviews2.bind(this))
               .catch(error => {
         console.error(error);
       });
-      debugger;
-      console.log("inside function");
-
-      console.log(this.state.reviews);
-
     }
   _fetchYelpGetReviews2() {
-
-      //debugger;
       var dataStore = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-      console.log(dataStore);
       this.setState({
           results: dataStore.cloneWithRows(this.state.reviews)
       });
-      //debugger;
-      console.log(this.state);
-      console.log(this.state.reviews);
-
     }
 
     navigate() {
@@ -124,17 +88,7 @@ class Show extends Component{
       });
     }
 
-  render(){
-    //console.log(this.state.access_token);
-    console.log("render");
-
-    console.log(this.state);
-    console.log("inside render");
-    console.log(this.state.reviews);
-    // if (this.state.reviews[0]){
-    //
-    //   this._fetchYelpGetReviews2();
-    // }
+  render() {
     var TouchableElement = TouchableHighlight;
     if (Platform.OS === 'android') {
     TouchableElement = TouchableNativeFeedback;
@@ -154,11 +108,6 @@ class Show extends Component{
           style={styles.button}
           onPress={this.navigate.bind(this)}>
           <Text style={styles.buttonText}> Back </Text>
-        </TouchableElement>
-        <TouchableElement
-          style={styles.button}
-          onPress={this._fetchYelpGetReviews2.bind(this)}>
-          <Text style={styles.buttonText}> list </Text>
         </TouchableElement>
         <ListView
          style={{marginTop: 100}}
